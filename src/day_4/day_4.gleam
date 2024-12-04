@@ -22,7 +22,7 @@ pub fn part_1() -> Int {
     // io.println("Index       -> " <> int.to_string(line_index))
     // io.println("---------------")
 
-    index_fold(over: line, from: 0, with: fn(char_acc, char, char_index) {
+    index_fold(over: line, from: 0, with: fn(xmas, char, char_index) {
       case char {
         "X" -> {
           //io.debug(
@@ -32,15 +32,33 @@ pub fn part_1() -> Int {
           // <> int.to_string(line_index),
           //)
 
-          grid_construct(
-            from: the_matrix,
-            line_index: line_index,
-            char_index: char_index,
-          )
+          let sub_grid =
+            grid_construct(
+              from: the_matrix,
+              line_index: line_index,
+              char_index: char_index,
+            )
 
-          char_acc
+          let xmas_count = {
+            list.fold(
+              [
+                #(0, 1),
+                #(0, -1),
+                #(1, 0),
+                #(-1, 0),
+                #(1, 1),
+                #(1, -1),
+                #(-1, 1),
+                #(-1, -1),
+              ],
+              xmas,
+              fn(xmas, direction) { check_sub_grid(direction, sub_grid) },
+            )
+          }
+
+          xmas
         }
-        _ -> char_acc
+        _ -> xmas
       }
     })
 
@@ -48,6 +66,21 @@ pub fn part_1() -> Int {
   })
 
   1
+}
+
+fn check_sub_grid(direction: #(Int, Int), sub_matrix: List(List(String))) {
+  // [
+  //       0  1  2  3  4  5  6
+  //    0 [*, ., ., *, ., ., *]
+  //    1 [., *, ., *, ., *, .]
+  //    2 [., ., *, *, *, ., .]
+  //    3 [*, *, *, X, *, *, *] <- Check from here
+  //    4 [., ., *, *, *, ., .]
+  //    5 [., *, ., *, ., *, .]
+  //    6 [*, ., ., *, ., ., *]
+  // ]
+  list.range(1, 3) |> list.map(fn(step) { todo })
+  //  list.index_fold(matrix, 0, fn(acc, line, line_index) { todo })
 }
 
 // Construct a 7x7 grid matrix around "X" from the original matrix
@@ -59,7 +92,6 @@ fn grid_construct(
   matrix
   |> line_window(line_index)
   |> column_window(char_index)
-  // |> check_grid(0)
 }
 
 fn column_window(
@@ -72,43 +104,38 @@ fn column_window(
   //  ["M", "M", "S" ] -< char_index, append with point if necessary >- [".", ".", "."]
   // ]
 
-  let x =
-    list.map(matrix, fn(line) {
-      let #(first_half, second_half) = list.split(list: line, at: char_index)
-      let filled_first_half = {
-        case list.length(first_half) {
-          3 -> first_half
-          l if l < 3 ->
-            list.reverse(list.append(
-              list.reverse(first_half),
-              list.repeat(item: ".", times: 3 - l),
-            ))
-          l if l > 3 -> {
-            let #(_, slice) = list.split(first_half, char_index - 3)
-            slice
-          }
-          _ -> panic
+  list.map(matrix, fn(line) {
+    let #(first_half, second_half) = list.split(list: line, at: char_index)
+    let filled_first_half = {
+      case list.length(first_half) {
+        3 -> first_half
+        l if l < 3 ->
+          list.reverse(list.append(
+            list.reverse(first_half),
+            list.repeat(item: ".", times: 3 - l),
+          ))
+        l if l > 3 -> {
+          let #(_, slice) = list.split(first_half, char_index - 3)
+          slice
         }
+        _ -> panic
       }
+    }
 
-      let filled_second_half = {
-        case list.length(second_half) {
-          4 -> second_half
-          l if l < 4 ->
-            list.append(second_half, list.repeat(item: ".", times: 4 - l))
-          l if l > 4 -> {
-            let #(slice, _) = list.split(second_half, 4)
-            slice
-          }
-          _ -> panic
+    let filled_second_half = {
+      case list.length(second_half) {
+        4 -> second_half
+        l if l < 4 ->
+          list.append(second_half, list.repeat(item: ".", times: 4 - l))
+        l if l > 4 -> {
+          let #(slice, _) = list.split(second_half, 4)
+          slice
         }
+        _ -> panic
       }
-      list.append(filled_first_half, filled_second_half)
-    })
-
-  io.debug(x)
-
-  []
+    }
+    list.append(filled_first_half, filled_second_half)
+  })
 }
 
 fn line_window(
