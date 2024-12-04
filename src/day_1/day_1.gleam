@@ -1,5 +1,4 @@
 import gleam/dict
-import gleam/int
 import gleam/io
 import gleam/list
 import gleam/string
@@ -26,6 +25,5 @@ pub fn part_1() {
         [] -> panic
       }
     })
-
-  io.debug(right_record)
+  // io.debug(right_record)
 }
