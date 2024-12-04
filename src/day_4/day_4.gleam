@@ -21,19 +21,19 @@ pub fn part_1() -> Int {
     |> list.map(fn(line) { string.split(line, "") })
 
   index_fold(over: the_matrix, from: 0, with: fn(line_acc, line, line_index) {
-    io.println("Accumulator -> " <> int.to_string(line_acc))
-    io.println("Index       -> " <> int.to_string(line_index))
-    io.println("---------------")
+    // io.println("Accumulator -> " <> int.to_string(line_acc))
+    // io.println("Index       -> " <> int.to_string(line_index))
+    // io.println("---------------")
 
     index_fold(over: line, from: 0, with: fn(char_acc, char, char_index) {
       case char {
         "X" -> {
-          io.debug(
-            "Found X at position "
-            <> int.to_string(char_index)
-            <> " at line "
-            <> int.to_string(line_index),
-          )
+          //io.debug(
+          //"Found X at position "
+          // <> int.to_string(char_index)
+          //<> " at line "
+          // <> int.to_string(line_index),
+          //)
 
           let grid =
             grid_construct(
@@ -41,7 +41,7 @@ pub fn part_1() -> Int {
               line_index: line_index,
               char_index: char_index,
             )
-          io.debug(grid)
+          //io.debug(grid)
 
           char_acc
         }

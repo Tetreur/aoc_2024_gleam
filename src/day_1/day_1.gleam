@@ -25,5 +25,5 @@ pub fn part_1() {
         [] -> panic
       }
     })
-  // io.debug(right_record)
+  io.debug(right_record)
 }
