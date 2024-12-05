@@ -23,13 +23,6 @@ pub fn part_1() -> Int {
     index_fold(over: line, from: line_acc, with: fn(xmas, char, char_index) {
       case char {
         "X" -> {
-          //io.debug(
-          //"Found X at position "
-          // <> int.to_string(char_index)
-          //<> " at line "
-          // <> int.to_string(line_index),
-          //)
-
           let coordinates =
             grid_construct(
               from: the_matrix,
